@@ -188,6 +188,10 @@
     <div class="state-msg"><span class="spin">⟳</span> загружаю…</div>
   </div>
 
+  <footer>
+    <a href="https://docs.github.com/en/rest" target="_blank">GitHub API</a>
+  </footer>
+
 </div>
 
 <script>
@@ -235,13 +239,16 @@
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}`;
     try {
       const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
-      if (!res.ok) throw new Error();
       const data = await res.json();
+      if (!res.ok) {
+        const msg = data.message || res.status;
+        document.getElementById('files-list').innerHTML =
+          `<div class="state-msg">ошибка: ${msg}</div>`;
+        return;
+      }
       allFiles = Array.isArray(data) ? data.filter(f => f.type === 'file') : [];
-      document.getElementById('file-count').textContent = allFiles.length;
       renderFiles(allFiles);
-    } catch {
-      document.getElementById('file-count').textContent = '—';
+    } catch (e) {
       document.getElementById('files-list').innerHTML =
         '<div class="state-msg">не удалось загрузить файлы</div>';
     }
