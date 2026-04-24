@@ -4,232 +4,192 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ResourceHub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0a0a0f;
-      --surface: #111118;
-      --border: #1e1e2e;
-      --accent: #7fff72;
-      --accent2: #72d4ff;
-      --text: #e8e8f0;
-      --muted: #5a5a78;
-      --danger: #ff6b6b;
-      --mono: 'Space Mono', monospace;
-      --sans: 'Syne', sans-serif;
+      --bg: #f7f6f3;
+      --text: #1a1a18;
+      --muted: #9a9990;
+      --border: #e2e0db;
+      --accent: #1a1a18;
+      --hover-bg: #eeecea;
+      --mono: 'DM Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: var(--sans);
+      font-weight: 300;
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(127,255,114,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(127,255,114,.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      pointer-events: none;
-      z-index: 0;
     }
 
     .container {
-      max-width: 860px;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 0 24px;
-      position: relative;
-      z-index: 1;
+      padding: 0 32px;
     }
 
+    /* Header */
     header {
-      padding: 48px 0 32px;
+      padding: 72px 0 56px;
       display: flex;
-      align-items: flex-end;
+      align-items: baseline;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 40px;
     }
 
-    .logo { display: flex; flex-direction: column; gap: 4px; }
-
-    .logo-tag {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
-
-    .logo-name {
-      font-family: var(--sans);
-      font-size: 36px;
-      font-weight: 800;
-      line-height: 1;
-      letter-spacing: -1px;
-      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .logo {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: -0.3px;
+      color: var(--text);
     }
 
     .header-stats {
       font-family: var(--mono);
       font-size: 12px;
       color: var(--muted);
-      text-align: right;
     }
 
     #file-count {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--accent);
-      font-family: var(--sans);
-      display: block;
+      color: var(--text);
     }
 
     /* Search */
-    .files-header {
+    .toolbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
     }
 
     .section-label {
       font-family: var(--mono);
       font-size: 11px;
       color: var(--muted);
-      letter-spacing: 2px;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
     .search-input {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 14px;
+      background: transparent;
+      border: none;
       color: var(--text);
       font-family: var(--mono);
-      font-size: 13px;
+      font-size: 12px;
       outline: none;
-      width: 220px;
-      transition: border-color .2s;
+      text-align: right;
+      width: 180px;
     }
-    .search-input:focus { border-color: var(--accent); }
     .search-input::placeholder { color: var(--muted); }
 
-    /* Files */
-    #files-list { display: grid; gap: 8px; }
+    /* File list */
+    #files-list { display: flex; flex-direction: column; }
 
     .file-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 20px;
       display: flex;
       align-items: center;
       gap: 16px;
-      transition: border-color .2s, transform .15s;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+      margin: 0 -12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      border-radius: 4px;
+      border-bottom: 1px solid var(--border);
     }
 
     .file-card:hover {
-      border-color: rgba(127,255,114,.3);
-      transform: translateX(3px);
+      background: var(--hover-bg);
     }
 
-    .file-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      background: rgba(127,255,114,.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
+    .file-ext {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      width: 32px;
       flex-shrink: 0;
+      text-align: right;
     }
 
-    .file-info { flex: 1; min-width: 0; }
+    .file-info {
+      flex: 1;
+      min-width: 0;
+    }
 
     .file-name {
-      font-weight: 600;
       font-size: 14px;
+      font-weight: 400;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      margin-bottom: 4px;
     }
 
-    .file-meta {
+    .file-size {
       font-family: var(--mono);
       font-size: 11px;
       color: var(--muted);
-      display: flex;
-      gap: 12px;
+      margin-top: 2px;
     }
 
     .btn-download {
-      background: transparent;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 8px 14px;
-      color: var(--accent2);
       font-family: var(--mono);
       font-size: 11px;
-      cursor: pointer;
-      transition: all .2s;
-      white-space: nowrap;
+      color: var(--muted);
       text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      letter-spacing: 0.03em;
+      transition: color .15s;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .btn-download:hover {
-      background: rgba(114,212,255,.1);
-      border-color: var(--accent2);
+      color: var(--text);
     }
 
+    /* States */
     .state-msg {
-      text-align: center;
-      padding: 60px 24px;
+      padding: 80px 0;
       color: var(--muted);
       font-family: var(--mono);
-      font-size: 13px;
-    }
-
-    .state-msg .big { font-size: 40px; margin-bottom: 12px; display: block; }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 24px 0;
+      font-size: 12px;
       text-align: center;
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 48px;
     }
-
-    footer a { color: var(--accent); text-decoration: none; }
 
     .spin {
       display: inline-block;
-      animation: spin .8s linear infinite;
+      animation: spin .9s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    @media (max-width: 640px) {
-      header { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .files-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-      .search-input { width: 100%; }
+    /* Footer */
+    footer {
+      padding: 48px 0 32px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 480px) {
+      header { flex-direction: column; gap: 8px; padding: 48px 0 40px; }
+      .toolbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .search-input { text-align: left; width: 100%; }
     }
   </style>
 </head>
@@ -238,30 +198,23 @@
 <div class="container">
 
   <header>
-    <div class="logo">
-      <span class="logo-tag">// resource hub</span>
-      <span class="logo-name">ResourceHub</span>
-    </div>
+    <div class="logo">ResourceHub</div>
     <div class="header-stats">
-      <span id="file-count"><span class="spin">⟳</span></span>
-      файлов в репозитории
+      <span id="file-count"><span class="spin">⟳</span></span> файлов
     </div>
   </header>
 
-  <div class="files-header">
-    <div class="section-label">// Файлы</div>
-    <input class="search-input" type="text" id="search" placeholder="🔍 поиск..." oninput="filterFiles()" />
+  <div class="toolbar">
+    <div class="section-label">Файлы</div>
+    <input class="search-input" type="text" id="search" placeholder="поиск" oninput="filterFiles()" />
   </div>
 
   <div id="files-list">
-    <div class="state-msg">
-      <span class="big spin" style="display:inline-block">⟳</span><br>
-      Загружаю файлы…
-    </div>
+    <div class="state-msg"><span class="spin">⟳</span> загружаю…</div>
   </div>
 
   <footer>
-    ResourceHub — работает на <a href="https://docs.github.com/en/rest" target="_blank">GitHub API</a>
+    <a href="https://docs.github.com/en/rest" target="_blank">GitHub API</a>
   </footer>
 
 </div>
@@ -279,40 +232,25 @@
     return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
   }
 
-  function fileEmoji(name) {
-    const ext = name.split('.').pop().toLowerCase();
-    const map = {
-      pdf: '📄', png: '🖼', jpg: '🖼', jpeg: '🖼', gif: '🖼', svg: '🖼', webp: '🖼',
-      zip: '📦', rar: '📦', gz: '📦', '7z': '📦',
-      mp4: '🎬', mov: '🎬', avi: '🎬', mkv: '🎬',
-      mp3: '🎵', wav: '🎵', flac: '🎵',
-      js: '⚡', ts: '⚡', jsx: '⚡', tsx: '⚡',
-      py: '🐍', rb: '💎', go: '🐹', rs: '🦀',
-      html: '🌐', css: '🎨', json: '📋', xml: '📋', yaml: '📋', yml: '📋',
-      md: '📝', txt: '📝', doc: '📝', docx: '📝',
-      xls: '📊', xlsx: '📊', csv: '📊',
-    };
-    return map[ext] || '📁';
+  function fileExt(name) {
+    const parts = name.split('.');
+    return parts.length > 1 ? parts.pop().toLowerCase() : '—';
   }
 
   function renderFiles(files) {
     const el = document.getElementById('files-list');
     if (!files.length) {
-      el.innerHTML = '<div class="state-msg"><span class="big">📭</span>Файлы не найдены</div>';
+      el.innerHTML = '<div class="state-msg">ничего не найдено</div>';
       return;
     }
     el.innerHTML = files.map(f => `
       <div class="file-card">
-        <div class="file-icon">${fileEmoji(f.name)}</div>
+        <div class="file-ext">${fileExt(f.name)}</div>
         <div class="file-info">
           <div class="file-name">${f.name}</div>
-          <div class="file-meta">
-            <span>${formatSize(f.size)}</span>
-          </div>
+          <div class="file-size">${formatSize(f.size)}</div>
         </div>
-        <a class="btn-download" href="${f.download_url}" download="${f.name}" target="_blank">
-          ⬇ Скачать
-        </a>
+        <a class="btn-download" href="${f.download_url}" download="${f.name}" target="_blank">скачать ↓</a>
       </div>
     `).join('');
   }
@@ -326,15 +264,15 @@
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}`;
     try {
       const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
-      if (!res.ok) throw new Error('Ошибка загрузки');
+      if (!res.ok) throw new Error();
       const data = await res.json();
       allFiles = Array.isArray(data) ? data.filter(f => f.type === 'file') : [];
       document.getElementById('file-count').textContent = allFiles.length;
       renderFiles(allFiles);
-    } catch (e) {
+    } catch {
       document.getElementById('file-count').textContent = '—';
       document.getElementById('files-list').innerHTML =
-        '<div class="state-msg"><span class="big">⚠️</span>Не удалось загрузить файлы.<br>Убедись что репозиторий публичный.</div>';
+        '<div class="state-msg">не удалось загрузить файлы</div>';
     }
   }
 
