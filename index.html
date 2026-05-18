@@ -234,7 +234,7 @@
   async function loadFiles() {
     const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}`;
     try {
-      const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json', 'Authorization': 'Bearer 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' } });
+      const res = await fetch(url, { headers: { 'Accept': 'application/vnd.github+json' } });
       const data = await res.json();
       if (!res.ok) {
         const msg = data.message || res.status;
